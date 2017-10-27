@@ -20,10 +20,11 @@ function love.load()
 	w2, h2 = love.graphics.getDimensions( )
 	Gamestate.registerEvents()
 	Gamestate.switch(splashState)
+	title = love.window.getTitle()
 end
 
 function love.update(dt)
-	love.window.setTitle(dt)
+	love.window.setTitle(title .. " v" .. math.floor(dt*1000000))
 end
 
 function love.draw()
@@ -106,10 +107,12 @@ end
 function menu:update()
 	-- put the layout origin at position (100,100)
 	-- the layout will grow down and to the right from this point
-	suit.layout:reset(100,100)
+	resetPad = 10
+	suit.layout:reset(10,10)
+	suit.layout:padding(10)
 
 	-- put an input widget at the layout origin, with a cell size of 200 by 30 pixels
-	suit.Input(input, suit.layout:row(200,30))
+	suit.Input(input, suit.layout:row(love.graphics.getWidth()-resetPad*2,30))
 	
 	-- put a label that displays the text below the first cell
 	-- the cell size is the same as the last one (200x30 px)
@@ -121,7 +124,7 @@ function menu:update()
 	
 	-- put a button of size 200x30 px in the cell below
 	-- if the button is pressed, quit the game
-	if suit.Button("ploy gaem", suit.layout:row()).hit then
+	if suit.Button("ploy gaem", suit.layout:row(love.graphics.getWidth()-resetPad*2,30,10, love.graphics.getHeight()-70 )).hit then
 		Gamestate.switch(game)
 	end
 
